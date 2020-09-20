@@ -22,19 +22,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.sharingshortcut_activity_main)
 
         setupView()
-        addShareShortcuts(this)
+        getShortcutInfoList(this)
+    }
 
+    private fun getShortcutInfoList(context: Context): List<Unit> {
+        return ContactDataSource.getAllContacts()
+            .take(3)
+            .map { it.addShareShortcuts(context) }
     }
 
 
-    private fun addShareShortcuts(context: Context) {
+    private fun Contact.addShareShortcuts(context: Context) {
         val shortcutInfoList = mutableListOf<ShortcutInfoCompat>()
 
         shortcutInfoList.add(
-        ShortcutInfoCompat.Builder(context, "kisi1")
-                .setShortLabel("Kişi 1")
+        ShortcutInfoCompat.Builder(context, this.id)
+                .setShortLabel(this.name)
                 .setPerson(toPerson())
-                .setIcon(IconCompat.createWithResource(context, R.drawable.ic_android_red))
+                .setIcon(IconCompat.createWithResource(context, this.image))
                 .setCategories(setOf(CATEGORY_TEXT_SHARE_TARGET))
                 .setLongLived(true)
                 .setIntent(Intent(Intent.ACTION_DEFAULT))
@@ -45,11 +50,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun toPerson(): Person {
+    private fun Contact.toPerson(): Person {
         return Person.Builder()
-                .setKey("kisi1")
-                .setName("Kişi 1")
-                .build()
+            .setKey(this.id)
+            .setName(this.name)
+            .build()
     }
 
     private fun setupView() {
