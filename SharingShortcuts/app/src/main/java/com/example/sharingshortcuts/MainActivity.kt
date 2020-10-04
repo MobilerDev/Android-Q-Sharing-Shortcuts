@@ -14,8 +14,9 @@ import kotlinx.android.synthetic.main.sharingshortcut_activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val NUMBER_OF_CONTACTS = 3
     private val CATEGORY_TEXT_SHARE_TARGET =
-        "com.example.android.sharingshortcuts.category.TEXT_SHARE_TARGET"
+            "com.example.android.sharingshortcuts.category.TEXT_SHARE_TARGET"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getShortcutInfoList(context: Context): List<Unit> {
         return ContactDataSource.getAllContacts()
-            .take(3)
+            .take(NUMBER_OF_CONTACTS)
             .map { it.addShareShortcuts(context) }
     }
 
